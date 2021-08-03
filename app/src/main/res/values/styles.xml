@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomCardStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/button_color</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+</resources>

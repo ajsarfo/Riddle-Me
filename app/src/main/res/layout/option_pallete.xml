@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:background="@color/background"
+    android:padding="16dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/shuffle"
+        android:layout_width="@dimen/options_item_size"
+        android:layout_height="@dimen/options_item_size"
+        android:layout_gravity="start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_shuffle"
+        app:tint="@color/button_color" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/rewind"
+        android:layout_width="@dimen/options_item_size"
+        android:layout_height="@dimen/options_item_size"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:alpha="0.7"
+        app:layout_constraintStart_toEndOf="@+id/shuffle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_rewind"
+        app:tint="@color/button_color" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/skip_level"
+        android:layout_width="@dimen/options_forward_item_width"
+        android:layout_height="@dimen/options_forward_item_height"
+        android:layout_gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_forward"
+        app:tint="@color/button_color" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="menu_size">28dp</dimen>
+
+    <dimen name="character_holder_size">30dp</dimen>
+    <dimen name="character_holder_layout_margin">10dp</dimen>
+
+    <dimen name="character_layout_margin">8dp</dimen>
+    <dimen name="character_layout_spacing">3dp</dimen>
+
+    <dimen name="add_button_size">20dp</dimen>
+    <dimen name="coin_size">23dp</dimen>
+
+    <dimen name="skip_level_count_button_size">24dp</dimen>
+
+    <dimen name="settings_dialog_height">200dp</dimen>
+
+    <dimen name="options_item_size">24dp</dimen>
+    <dimen name="options_forward_item_width">32dp</dimen>
+    <dimen name="options_forward_item_height">24dp</dimen>
+
+    <dimen name="hint_dialog_height">330dp</dimen>
+    <dimen name="hint_child_card_height">50dp</dimen>
+    <dimen name="hint_coin_size">25dp</dimen>
+    <dimen name="hint_content_paddingLeft">32dp</dimen>
+    <dimen name="hint_item_card_corner_radius">2dp</dimen>
+
+    <dimen name="about_dialog_height">200dp</dimen>
+
+    <dimen name="dialog_button_corner_radius">6dp</dimen>
+
+    <dimen name="holder_arrow_height">12dp</dimen>
+    <dimen name="holder_arrow_width">12dp</dimen>
+
+    <dimen name="reveal_card_left_right_padding">24dp</dimen>
+    <dimen name="reveal_card_top_bottom_padding">7dp</dimen>
+</resources>
