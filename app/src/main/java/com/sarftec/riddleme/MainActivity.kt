@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
-import com.appodeal.ads.Appodeal
 import com.sarftec.riddleme.databinding.ActivityMainBinding
 import com.sarftec.riddleme.dialogs.SettingsDialog
 import com.sarftec.riddleme.fragment.CongratsFragment
@@ -61,16 +60,6 @@ class MainActivity : AppCompatActivity(), GameListener {
         super.onCreate(savedInstanceState)
         hideSystemBars()
         setContentView(mainBinding.root)
-        /**************Set up appodeal configuration*****************/
-       // Appodeal.setTesting(true)
-        Appodeal.setBannerViewId(R.id.main_banner)
-        Appodeal.initialize(
-            this,
-            getString(R.string.appodeal_id),
-            Appodeal.BANNER_VIEW or Appodeal.REWARDED_VIDEO
-        )
-        Appodeal.cache(this, Appodeal.REWARDED_VIDEO)
-        /*************************************************************/
         settingsDialog = SettingsDialog(this) { isSoundOn ->
             lifecycleScope.launch {
                 settingsRepository.setSoundOn(isSoundOn)

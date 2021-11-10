@@ -1,79 +1,106 @@
 package com.sarftec.riddleme.advertisement
 
 import android.app.Activity
-import com.appodeal.ads.Appodeal
-import com.appodeal.ads.RewardedVideoCallbacks
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.sarftec.riddleme.R
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class RewardVideoManager(
     private val activity: Activity,
+    private val adRequest: AdRequest,
     private val networkManager: NetworkManager,
     private val onSuccess: () -> Unit,
     private val onCancelled: () -> Unit,
-    private val onNetworkError: () -> Unit
+    private val onNetworkError: () -> Unit,
 ) {
 
-    private var isFinished = false
+    private var navigateForward = false
 
-    init {
-        configure()
-    }
+    private var job: Job? = null
+
+    private var hasNetwork = false
+
+    private var cancelTimer = false
 
     fun showRewardVideo() {
-        Appodeal.cache(activity, Appodeal.REWARDED_VIDEO)
         if (!networkManager.isNetworkAvailable()) {
             onNetworkError()
-        } else {
-            if (Appodeal.isLoaded(Appodeal.REWARDED_VIDEO)) Appodeal.show(
-                activity,
-                Appodeal.REWARDED_VIDEO
-            )
-            else onNetworkError()
+            return
         }
-    }
-
-    private fun configure() {
-        Appodeal.setRewardedVideoCallbacks(
-            object : RewardedVideoCallbacks {
-                override fun onRewardedVideoLoaded(p0: Boolean) {
-                }
-
-                override fun onRewardedVideoFailedToLoad() {
-                    onNetworkError()
-                }
-
-                override fun onRewardedVideoShown() {
-
-                }
-
-                override fun onRewardedVideoShowFailed() {
-                    onNetworkError()
-                }
-
-                override fun onRewardedVideoFinished(p0: Double, p1: String?) {
-                    isFinished = true
-                }
-
-                override fun onRewardedVideoClosed(p0: Boolean) {
-                    if (!isFinished) return
-                    isFinished = false
-                    onSuccess()
-                }
-
-                override fun onRewardedVideoExpired() {
-
-                }
-
-                override fun onRewardedVideoClicked() {
-
-                }
-            }
+        hasNetwork = true
+        launchRewardTimer()
+        RewardedAd.load(
+            activity,
+            activity.getString(R.string.admob_reward_video_id),
+            adRequest,
+            getRewardListener()
         )
     }
 
-    companion object {
-        fun runAppodealConfiguration() {
-            Appodeal.disableWriteExternalStoragePermissionCheck()
-            Appodeal.disableLocationPermissionCheck()
+    private fun getRewardListener(): RewardedAdLoadCallback {
+        return object : RewardedAdLoadCallback() {
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                navigateForward = false
+                onNetworkError()
+            }
+
+            override fun onAdLoaded(rewardAd: RewardedAd) {
+                navigateForward = false
+                rewardAd.fullScreenContentCallback = getContentCallback()
+                if (hasNetwork) {
+                    rewardAd.show(activity) {
+                        Log.v(
+                            "TAG",
+                            "User rewarded for item type => ${it.type} and amount ${it.amount}"
+                        )
+                        navigateForward = true
+                    }
+                }
+            }
         }
     }
+
+    private fun launchRewardTimer() {
+        cancelTimer = false
+        job = (activity as AppCompatActivity).lifecycleScope.launch {
+            delay(TimeUnit.SECONDS.toMillis(10))
+            hasNetwork = false
+            job = null
+            if (!cancelTimer) onNetworkError()
+            cancelTimer = true
+        }
+    }
+
+    private fun getContentCallback(): FullScreenContentCallback {
+        return object : FullScreenContentCallback() {
+            override fun onAdShowedFullScreenContent() {
+                cancelTimer = true
+                Log.v("TAG", "Showed full screen video")
+            }
+
+            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                navigateForward = false
+                onNetworkError()
+            }
+
+            override fun onAdDismissedFullScreenContent() {
+                if (navigateForward) onSuccess()
+                if (!navigateForward) onCancelled()
+                navigateForward = false
+                cancelTimer = true
+            }
+        }
+    }
+
 }

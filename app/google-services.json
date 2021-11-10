@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "997357453382",
+    "project_id": "riddle-me-c3529",
+    "storage_bucket": "riddle-me-c3529.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997357453382:android:adc2144b12362b64aa0a47",
+        "android_client_info": {
+          "package_name": "com.sarftec.riddleme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997357453382-90mha67kcgi67pq764ik5oq4a8ttmcv3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-fN_eJMdgAs8k2s_FqAhZhycP4HZpZkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997357453382-90mha67kcgi67pq764ik5oq4a8ttmcv3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

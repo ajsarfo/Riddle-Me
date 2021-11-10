@@ -14,8 +14,8 @@ android {
         applicationId "com.sarftec.riddleme"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 2
-        versionName "1.0"
+        versionCode 3
+        versionName "2.0"
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -63,10 +63,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 
-    //Dependencies for appodeal
-    implementation 'com.appodeal.ads.sdk:core:2.10.1'
-    implementation 'com.appodeal.ads.sdk.networks:bidmachine:2.10.1.12'
-    implementation 'com.appodeal.ads.sdk.networks:admob:2.10.1.12'
+    //Dependencies for admob
+    implementation 'com.google.android.gms:play-services-ads:20.4.0'
 
     //Dependencies for datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0-beta02"

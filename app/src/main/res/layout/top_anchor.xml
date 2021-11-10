@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.appodeal.ads.BannerView
+    <LinearLayout
         android:id="@+id/main_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:background="@color/teal_200"
         tools:layout_height="50dp"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        tools:background="@color/teal_200"
+        android:orientation="horizontal" />
 
 </LinearLayout>

@@ -17,19 +17,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.appodeal.ads.Appodeal
+import com.google.android.gms.ads.AdRequest
 import com.sarftec.riddleme.GameListener
 import com.sarftec.riddleme.R
+import com.sarftec.riddleme.advertisement.BannerManager
 import com.sarftec.riddleme.advertisement.NetworkManager
 import com.sarftec.riddleme.advertisement.RewardVideoManager
 import com.sarftec.riddleme.databinding.CharacterHolderBinding
 import com.sarftec.riddleme.databinding.CharacterSelectionBinding
 import com.sarftec.riddleme.databinding.FragmentGameBinding
 import com.sarftec.riddleme.databinding.SpecialSelectionBinding
-import com.sarftec.riddleme.dialogs.CoinsDialog
-import com.sarftec.riddleme.dialogs.HintDialog
-import com.sarftec.riddleme.dialogs.SkipLevelDialog
-import com.sarftec.riddleme.dialogs.SkipLevelErrorDialog
+import com.sarftec.riddleme.dialogs.*
 import com.sarftec.riddleme.tools.SoundManager
 import com.sarftec.riddleme.tools.toast
 import com.sarftec.riddleme.viewmodel.*
@@ -70,8 +68,13 @@ class GameFragment : Fragment() {
 
     private val coinsDialog by lazy {
         CoinsDialog(requireActivity()) {
+            loadingSpinnerDialog.show()
             coinsRewardVideoManager.showRewardVideo()
         }
+    }
+
+    private val loadingSpinnerDialog by lazy {
+        LoadingSpinnerDialog(requireActivity())
     }
 
     private val networkManager by lazy {
@@ -81,14 +84,18 @@ class GameFragment : Fragment() {
     private val skipRewardVideoManager by lazy {
         RewardVideoManager(
             requireActivity(),
+            adRequest,
             networkManager,
             onSuccess = {
+                loadingSpinnerDialog.dismiss()
                 viewModel.onSkipLevelVideoShown()
             },
             onCancelled = {
-                Log.v("TAG", "skip Reward Video Cancelled!")
+                loadingSpinnerDialog.dismiss()
+                requireContext().toast("Skip Reward Video Cancelled!")
             },
             onNetworkError = {
+                loadingSpinnerDialog.dismiss()
                 requireContext().toast("Network Error! Check Internet Connection")
             }
         )
@@ -97,21 +104,30 @@ class GameFragment : Fragment() {
     private val coinsRewardVideoManager by lazy {
         RewardVideoManager(
             requireActivity(),
+            adRequest,
             networkManager,
             onSuccess = {
                 Log.v("TAG", "coin video success!")
+                loadingSpinnerDialog.dismiss()
                 gameListener?.playSound(SoundManager.Sound.RECEIVE_COINS)
                 playCoinsAnimation()
                 viewModel.onReceiveCoinsReward(60)
             },
             onCancelled = {
+                loadingSpinnerDialog.dismiss()
                 Log.v("TAG", "coin video  Cancelled!")
             },
             onNetworkError = {
+                loadingSpinnerDialog.dismiss()
                 requireContext().toast("Network Error! Check Internet Connection")
             }
         )
     }
+
+    private val adRequest by lazy {
+        AdRequest.Builder().build()
+    }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -120,7 +136,7 @@ class GameFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Appodeal.show(requireActivity(), Appodeal.BANNER_VIEW)
+
         specialLetterHolder?.pulsate()
     }
 
@@ -133,13 +149,18 @@ class GameFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Appodeal.setBannerViewId(R.id.main_banner)
         isCreated = true
         gameBinding = FragmentGameBinding.inflate(
             inflater,
             container,
             false
         )
+        /*************** Admob Configuration ********************/
+        BannerManager(requireActivity(), adRequest).attachBannerAd(
+            getString(R.string.admob_banner_main),
+            gameBinding.topAnchor.mainBanner
+        )
+        /**********************************************************/
         hintDialog = HintDialog(requireActivity()) {
             when (it) {
                 0 -> viewModel.onRevealLetter()
@@ -210,6 +231,7 @@ class GameFragment : Fragment() {
         viewModel.advertisement.observe(viewLifecycleOwner) { advertisement ->
             when (advertisement) {
                 is Advertisement.SkipLevelVideo -> {
+                    loadingSpinnerDialog.show()
                     skipRewardVideoManager.showRewardVideo()
                     viewModel.onNeutralAdvertisement()
                 }

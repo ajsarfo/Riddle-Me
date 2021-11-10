@@ -1,7 +1,21 @@
 <resources>
     <string name="app_name">Riddle Me</string>
 
-    <string name="appodeal_id">1a2ca92722d9d0a47bd14d98b761c516a65f9b8cf22bb61d</string>
-
     <string name="about"><em>Riddle Me</em> is an app designed to rack-up and test the mind with carefully selected world riddles. Improve your cognitive mind as you climb up the levels solving riddles in all ranges of difficulty</string>
+
+
+    <string name="admob_test_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_test_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="admob_test_reward_video_id">ca-app-pub-3940256099942544/5224354917</string>
+
+
+   <!--
+    <string name="admob_banner_main">@string/admob_test_banner_id</string>
+    <string name="admob_reward_video_id">@string/admob_test_reward_video_id</string>
+   -->
+
+
+     <string name="admob_banner_main">ca-app-pub-6150813452529727/4179760536</string>
+     <string name="admob_reward_video_id">ca-app-pub-6150813452529727/1054247209</string>
+
 </resources>
